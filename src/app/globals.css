@@ -1,26 +1,200 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 10, 10, 10;
+  --accent-rgb: 200, 200, 255;
+  --neon-purple: 170, 0, 255;
+  --neon-blue: 0, 195, 255;
+  --neon-pink: 255, 105, 180;
+  --neon-green: 0, 255, 128;
+  --sakura-pink: 255, 183, 197;
+  --sakura-light: 255, 213, 228;
+  --sakura-dark: 255, 145, 175;
+  --sakura-white: 255, 255, 255;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      rgb(var(--background-start-rgb)),
+      rgb(var(--background-end-rgb))
+    )
+    fixed;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Неоновые эффекты фона */
+#neon-effects {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Контейнер для падающих лепестков */
+.sakura-container {
+  position: fixed;
+  top: -50px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Лепестки сакуры */
+.sakura-leaf {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%23ffffff'%3E%3Cpath d='M50 15c-5 10-15 10-25 5C15 30 5 30 10 50C15 70 30 70 35 75C40 65 45 65 50 75C55 65 60 65 65 75C70 70 85 70 90 50C95 30 85 30 75 5C65 10 55 10 50 15Z'/%3E%3C/svg%3E");
+  filter: drop-shadow(0 0 5px rgba(var(--sakura-white), 0.9));
+  opacity: 0.9;
+  z-index: 0;
+  pointer-events: none;
+  animation: sakuraFall var(--fall-time, 10s) linear infinite;
+  animation-delay: var(--fall-delay, 0s);
+  left: var(--fall-left, 0%);
+  top: -50px;
+}
+
+/* Общая анимация падения */
+@keyframes sakuraFall {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(var(--fall-scale, 0.8));
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) translateX(var(--fall-distance, 100px)) rotate(var(--fall-rotate, 360deg)) scale(var(--fall-scale, 0.8));
+    opacity: 0;
+  }
+}
+
+/* Асинхронные параметры для лепестков */
+.sakura-leaf:nth-child(1) { --fall-time: 8s; --fall-delay: 0s; --fall-distance: 100px; --fall-rotate: 360deg; --fall-scale: 0.7; --fall-left: 5%; }
+.sakura-leaf:nth-child(2) { --fall-time: 9s; --fall-delay: 1s; --fall-distance: -120px; --fall-rotate: 720deg; --fall-scale: 0.8; --fall-left: 10%; }
+.sakura-leaf:nth-child(3) { --fall-time: 7s; --fall-delay: 2s; --fall-distance: 80px; --fall-rotate: 540deg; --fall-scale: 0.6; --fall-left: 15%; }
+.sakura-leaf:nth-child(4) { --fall-time: 10s; --fall-delay: 0.5s; --fall-distance: -90px; --fall-rotate: 450deg; --fall-scale: 0.9; --fall-left: 20%; }
+.sakura-leaf:nth-child(5) { --fall-time: 6s; --fall-delay: 1.5s; --fall-distance: 110px; --fall-rotate: 270deg; --fall-scale: 0.7; --fall-left: 25%; }
+.sakura-leaf:nth-child(6) { --fall-time: 11s; --fall-delay: 0.2s; --fall-distance: -70px; --fall-rotate: 630deg; --fall-scale: 0.8; --fall-left: 30%; }
+.sakura-leaf:nth-child(7) { --fall-time: 7.5s; --fall-delay: 1.7s; --fall-distance: 130px; --fall-rotate: 360deg; --fall-scale: 0.6; --fall-left: 35%; }
+.sakura-leaf:nth-child(8) { --fall-time: 9.5s; --fall-delay: 0.7s; --fall-distance: -110px; --fall-rotate: 450deg; --fall-scale: 0.75; --fall-left: 40%; }
+.sakura-leaf:nth-child(9) { --fall-time: 8.5s; --fall-delay: 2.5s; --fall-distance: 90px; --fall-rotate: 315deg; --fall-scale: 0.85; --fall-left: 45%; }
+.sakura-leaf:nth-child(10) { --fall-time: 12s; --fall-delay: 0.3s; --fall-distance: -150px; --fall-rotate: 540deg; --fall-scale: 0.95; --fall-left: 50%; }
+.sakura-leaf:nth-child(11) { --fall-time: 7s; --fall-delay: 1.2s; --fall-distance: 100px; --fall-rotate: 405deg; --fall-scale: 0.7; --fall-left: 55%; }
+.sakura-leaf:nth-child(12) { --fall-time: 10s; --fall-delay: 2.2s; --fall-distance: -120px; --fall-rotate: 720deg; --fall-scale: 0.8; --fall-left: 60%; }
+.sakura-leaf:nth-child(13) { --fall-time: 8s; --fall-delay: 0.1s; --fall-distance: 80px; --fall-rotate: 270deg; --fall-scale: 0.65; --fall-left: 65%; }
+.sakura-leaf:nth-child(14) { --fall-time: 9s; --fall-delay: 1.8s; --fall-distance: -90px; --fall-rotate: 360deg; --fall-scale: 0.9; --fall-left: 70%; }
+.sakura-leaf:nth-child(15) { --fall-time: 7.5s; --fall-delay: 0.9s; --fall-distance: 110px; --fall-rotate: 450deg; --fall-scale: 0.75; --fall-left: 75%; }
+.sakura-leaf:nth-child(16) { --fall-time: 6.5s; --fall-delay: 2.7s; --fall-distance: -70px; --fall-rotate: 315deg; --fall-scale: 0.85; --fall-left: 80%; }
+.sakura-leaf:nth-child(17) { --fall-time: 11s; --fall-delay: 0.4s; --fall-distance: 130px; --fall-rotate: 630deg; --fall-scale: 0.7; --fall-left: 85%; }
+.sakura-leaf:nth-child(18) { --fall-time: 8s; --fall-delay: 1.4s; --fall-distance: -110px; --fall-rotate: 540deg; --fall-scale: 0.8; --fall-left: 90%; }
+.sakura-leaf:nth-child(19) { --fall-time: 9.5s; --fall-delay: 2.1s; --fall-distance: 90px; --fall-rotate: 405deg; --fall-scale: 0.9; --fall-left: 95%; }
+.sakura-leaf:nth-child(20) { --fall-time: 7.2s; --fall-delay: 0.6s; --fall-distance: -150px; --fall-rotate: 270deg; --fall-scale: 0.65; --fall-left: 8%; }
+.sakura-leaf:nth-child(21) { --fall-time: 10.5s; --fall-delay: 1.6s; --fall-distance: 100px; --fall-rotate: 720deg; --fall-scale: 0.8; --fall-left: 18%; }
+.sakura-leaf:nth-child(22) { --fall-time: 8.2s; --fall-delay: 0.8s; --fall-distance: -120px; --fall-rotate: 360deg; --fall-scale: 0.7; --fall-left: 28%; }
+.sakura-leaf:nth-child(23) { --fall-time: 9.8s; --fall-delay: 2.3s; --fall-distance: 80px; --fall-rotate: 450deg; --fall-scale: 0.85; --fall-left: 38%; }
+.sakura-leaf:nth-child(24) { --fall-time: 7.7s; --fall-delay: 0.3s; --fall-distance: -90px; --fall-rotate: 540deg; --fall-scale: 0.75; --fall-left: 48%; }
+.sakura-leaf:nth-child(25) { --fall-time: 6.8s; --fall-delay: 1.9s; --fall-distance: 110px; --fall-rotate: 315deg; --fall-scale: 0.9; --fall-left: 58%; }
+.sakura-leaf:nth-child(26) { --fall-time: 10.2s; --fall-delay: 0.2s; --fall-distance: -70px; --fall-rotate: 630deg; --fall-scale: 0.8; --fall-left: 68%; }
+.sakura-leaf:nth-child(27) { --fall-time: 9.3s; --fall-delay: 1.1s; --fall-distance: 130px; --fall-rotate: 720deg; --fall-scale: 0.7; --fall-left: 78%; }
+.sakura-leaf:nth-child(28) { --fall-time: 7.8s; --fall-delay: 2.8s; --fall-distance: -110px; --fall-rotate: 405deg; --fall-scale: 0.85; --fall-left: 88%; }
+.sakura-leaf:nth-child(29) { --fall-time: 8.7s; --fall-delay: 0.7s; --fall-distance: 90px; --fall-rotate: 360deg; --fall-scale: 0.7; --fall-left: 98%; }
+.sakura-leaf:nth-child(30) { --fall-time: 9.9s; --fall-delay: 1.3s; --fall-distance: -150px; --fall-rotate: 540deg; --fall-scale: 0.8; --fall-left: 3%; }
+.sakura-leaf:nth-child(31) { --fall-time: 6.4s; --fall-delay: 2.5s; --fall-distance: 100px; --fall-rotate: 270deg; --fall-scale: 0.75; --fall-left: 13%; }
+.sakura-leaf:nth-child(32) { --fall-time: 8.3s; --fall-delay: 0.4s; --fall-distance: -120px; --fall-rotate: 450deg; --fall-scale: 0.65; --fall-left: 23%; }
+.sakura-leaf:nth-child(33) { --fall-time: 7.4s; --fall-delay: 1.7s; --fall-distance: 80px; --fall-rotate: 630deg; --fall-scale: 0.85; --fall-left: 33%; }
+.sakura-leaf:nth-child(34) { --fall-time: 10.3s; --fall-delay: 0.1s; --fall-distance: -90px; --fall-rotate: 720deg; --fall-scale: 0.9; --fall-left: 43%; }
+.sakura-leaf:nth-child(35) { --fall-time: 8.9s; --fall-delay: 2.2s; --fall-distance: 110px; --fall-rotate: 405deg; --fall-scale: 0.7; --fall-left: 53%; }
+.sakura-leaf:nth-child(36) { --fall-time: 7.3s; --fall-delay: 0.9s; --fall-distance: -70px; --fall-rotate: 360deg; --fall-scale: 0.8; --fall-left: 63%; }
+.sakura-leaf:nth-child(37) { --fall-time: 6.7s; --fall-delay: 1.6s; --fall-distance: 130px; --fall-rotate: 270deg; --fall-scale: 0.85; --fall-left: 73%; }
+.sakura-leaf:nth-child(38) { --fall-time: 9.4s; --fall-delay: 0.5s; --fall-distance: -110px; --fall-rotate: 540deg; --fall-scale: 0.75; --fall-left: 83%; }
+.sakura-leaf:nth-child(39) { --fall-time: 8.1s; --fall-delay: 2.4s; --fall-distance: 90px; --fall-rotate: 315deg; --fall-scale: 0.8; --fall-left: 93%; }
+.sakura-leaf:nth-child(40) { --fall-time: 7.6s; --fall-delay: 0.7s; --fall-distance: -150px; --fall-rotate: 630deg; --fall-scale: 0.7; --fall-left: 3%; }
+
+/* Неоновый текст */
+.neon-text {
+  text-shadow: 
+    0 0 5px rgba(var(--neon-purple), 0.8),
+    0 0 10px rgba(var(--neon-purple), 0.5),
+    0 0 15px rgba(var(--neon-purple), 0.3);
+  animation: pulseNeon 3s infinite;
+}
+
+@keyframes pulseNeon {
+  0%, 100% {
+    text-shadow: 
+      0 0 5px rgba(var(--neon-purple), 0.8),
+      0 0 10px rgba(var(--neon-purple), 0.5),
+      0 0 15px rgba(var(--neon-purple), 0.3);
+  }
+  50% {
+    text-shadow: 
+      0 0 10px rgba(var(--neon-purple), 0.8),
+      0 0 20px rgba(var(--neon-purple), 0.5),
+      0 0 30px rgba(var(--neon-purple), 0.3);
+  }
+}
+
+@layer components {
+  .accent-glow {
+    text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.7);
+  }
+
+  .card {
+    background: rgba(30, 30, 30, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 0 30px rgba(var(--accent-rgb), 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .btn {
+    @apply px-4 py-2 rounded-md transition-all duration-300;
+    background: rgba(40, 40, 40, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .btn:hover {
+    background: rgba(60, 60, 60, 0.8);
+    box-shadow: 0 0 15px rgba(var(--accent-rgb), 0.3);
+  }
+
+  .btn-primary {
+    @apply btn;
+    background: rgba(80, 80, 120, 0.8);
+  }
+
+  .btn-primary:hover {
+    background: rgba(100, 100, 150, 0.8);
+  }
+  
+  .buttons-container {
+    @apply flex inline-flex flex-nowrap justify-center items-center gap-4 my-6 mx-auto;
+    width: 100%;
+    max-width: 800px;
+  }
 }
