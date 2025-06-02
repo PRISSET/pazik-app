@@ -22,19 +22,33 @@ sudo apt install -y nginx
 sudo systemctl enable nginx
 sudo systemctl start nginx
 
-# Клонирование репозитория
-git clone https://github.com/PRISSET/pazik-app.git /home/ubuntu/pazik-app
+# Создаем рабочий каталог
+INSTALL_DIR="$HOME/pazik-app"
+echo "Создаем рабочий каталог $INSTALL_DIR..."
+mkdir -p $INSTALL_DIR
+cd $INSTALL_DIR
 
-# Копирование проекта
-mkdir -p /home/ubuntu/pazik-app/pazik-app
-cd /home/ubuntu/pazik-app
+# Клонирование репозитория с GitHub
+echo "Клонируем репозиторий с GitHub..."
+git clone https://github.com/PRISSET/pazik-app.git .
+
+# Создание .env файла
+echo "Создаем файл конфигурации .env..."
+cat > .env.local << EOF
+DATABASE_URL="file:./db/pazik.db"
+JWT_SECRET="secret-pazik-app-key-for-auth-token-very-secure"
+EOF
 
 # Установка зависимостей
-cd /home/ubuntu/pazik-app/pazik-app
+echo "Устанавливаем зависимости..."
 npm install
+
+# Сборка проекта
+echo "Собираем проект..."
 npm run build
 
 # Настройка Nginx
+echo "Настраиваем Nginx..."
 sudo tee /etc/nginx/sites-available/pazik << EOF
 server {
     listen 80;
@@ -58,12 +72,13 @@ sudo nginx -t
 sudo systemctl restart nginx
 
 # Запуск приложения
-cd /home/ubuntu/pazik-app/pazik-app
+echo "Запускаем приложение..."
 pm2 start npm --name "pazik" -- start
 
 # Настройка автозапуска
+echo "Настраиваем автозапуск..."
 pm2 save
 pm2 startup
-sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu
+sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u $USER --hp $HOME
 
 echo "Установка завершена! Приложение доступно по IP-адресу сервера"
