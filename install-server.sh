@@ -51,7 +51,6 @@ sudo systemctl restart nginx
 
 # Установка приложения
 echo "Устанавливаем приложение..."
-cd pazik-app
 npm install
 npm run build
 
