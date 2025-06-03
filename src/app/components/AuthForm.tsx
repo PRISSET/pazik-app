@@ -38,7 +38,17 @@ export default function AuthForm() {
         body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
+      // Проверяем тип контента в ответе
+      const contentType = response.headers.get('content-type');
+      let data;
+      
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        // Если это не JSON, получаем текст и создаем объект с ошибкой
+        const text = await response.text();
+        data = { error: `Неожиданный ответ сервера: ${text.substring(0, 100)}...` };
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'Произошла ошибка');
